@@ -1,3 +1,5 @@
+// March 6 2016
+// Tufts Synthetic Biology
 // arduino code to control pcr setup
 void setup() {
    float denaturing_temp;
@@ -25,14 +27,14 @@ void loop() {
     // anneal
     unsigned long startD = millis();
     while(millis() - startD <= denaturing_time_seconds){
-
+      // go to and maintain annealing_temp
     }
 
 
     // extend
     unsigned long startD = millis();
     while(millis() - startD <= denaturing_time_seconds){
-
+      // go to and maintain extending_temp
     }
 
 
