@@ -27,6 +27,9 @@ void setup(){
 
 
 void makeGUI(){
+   cp5.addTextlabel("SETUP").setText("SETUP")
+      .setPosition(20,20).setColorValue(0).setFont(createFont("Georgia", 25));
+      
   cp5.addTextlabel("Temp").setText("Temp. (C) ")
       .setPosition(150,60).setColorValue(0).setFont(font);
   cp5.addTextlabel("Time").setText("Time (min:sec) : ")
@@ -57,8 +60,8 @@ void makeGUI(){
             .setAutoClear(false);
   cp5.addTextfield("extendingTime").setPosition(300, 200).setSize(60, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
-            .setAutoClear(false);             
-  cp5.addBang("Submit").setPosition(225,250);           
+            .setAutoClear(false);//.setColorBackground(#ffffff);             
+  cp5.addButton("Submit").setPosition(225,250);
 }
 
 
