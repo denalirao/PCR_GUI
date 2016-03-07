@@ -3,6 +3,7 @@ import controlP5.*;
 ControlP5 cp5;
 PFont font;
 Serial myPort;
+PImage logo;
 
 String denaturingTemp;
 String annealingTemp;
@@ -13,6 +14,7 @@ String extendingTimeRaw;
   
 void setup(){
   size(600,600);
+  logo = loadImage("synbiologo.png");
   
   // set up gui features
   cp5 = new ControlP5(this);
@@ -27,6 +29,7 @@ void setup(){
 
 
 void makeGUI(){
+  
    cp5.addTextlabel("SETUP").setText("SETUP")
       .setPosition(20,20).setColorValue(0).setFont(createFont("Georgia", 25));
       
@@ -41,6 +44,8 @@ void makeGUI(){
       .setPosition(40,150).setColorValue(0).setFont(font);
   cp5.addTextlabel("Extend").setText("Extend: ")
       .setPosition(40,200).setColorValue(0).setFont(font);
+  cp5.addTextlabel("Number of Cycles").setText("Number of Cycles: ")
+      .setPosition(40,250).setColorValue(0).setFont(font);      
       
   cp5.addTextfield("denaturingTemp").setPosition(175, 100).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
@@ -60,8 +65,17 @@ void makeGUI(){
             .setAutoClear(false);
   cp5.addTextfield("extendingTime").setPosition(300, 200).setSize(60, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
-            .setAutoClear(false);//.setColorBackground(#ffffff);             
-  cp5.addButton("Submit").setPosition(225,250);
+            .setAutoClear(false);//.setColorBackground(#ffffff);     
+                 
+                      
+  cp5.addTextfield("numCycles").setPosition(175, 250).setSize(30, 30)
+        .setFont(font).setFocus(true).setColor(color(255,255,255))
+        .setAutoClear(false);
+        
+  cp5.addButton("Submit").setPosition(225,300);
+  
+  image(logo, 300,300);
+
 }
 
 
@@ -86,9 +100,9 @@ void draw(){
 */
 
   background(255,255,255);
-  //submit.make();
-  
-  
+  imageMode(CENTER);
+  image(logo, 30,30);
+  //makeGUI();
   
   
 }
