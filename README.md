@@ -8,3 +8,8 @@ The plan:
 - Processing/Python GUI for on-site variable input/visualization
 - Plotly for run-time visualizations
 - Plotly widget + more on tuftssyntheticbiology.com
+
+to do:
+- allow touchdown anneal times
+- save previous run setups (with names)
+- give choices of previous setups
