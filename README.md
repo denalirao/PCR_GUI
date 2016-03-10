@@ -11,5 +11,6 @@ The plan:
 
 to do:
 - allow touchdown anneal times
+- gray out input fields after submit
 - save previous run setups (with names)
 - give choices of previous setups
