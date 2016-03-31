@@ -11,6 +11,7 @@ String extendingTemp;
 String denaturingTimeRaw;
 String annealingTimeRaw;
 String extendingTimeRaw;
+String numCycles;
   
 void setup(){
   size(600,600);
@@ -86,6 +87,31 @@ void Submit() {
   denaturingTimeRaw = cp5.get(Textfield.class,"denaturingTime").getText();
   annealingTimeRaw = cp5.get(Textfield.class,"annealingTime").getText();
   extendingTimeRaw = cp5.get(Textfield.class,"extendingTime").getText();
+  numCycles = cp5.get(Textfield.class,"numCycles").getText();
+  
+  // save this setup to file
+  String filename = "pcr_setup_" + month() + "_" + day() + "_" + year();
+  File f = new File(sketchPath(filename));
+  if (f.exists()){
+    filename = filename + "__" + hour() + "_" + minute(); 
+  }
+  
+  String[] setup = {
+    "PCR Setup " + month() + "/" + day() + "/" + year() + " " + hour() + ":" + minute(),
+    "\n",
+    "Denaturing Temp: " + denaturingTemp, 
+    "Annealing Temp: " + annealingTemp,
+    "Extending Temp: " + extendingTemp,
+    "\n",
+    "Denaturing Time: " + denaturingTimeRaw,
+    "Annealing Time: " + annealingTimeRaw,
+    "Extending Time: " + extendingTimeRaw,
+    "\n",
+    "Number of Cycles: " + numCycles
+  };
+  saveStrings(filename, setup);
+  
+  
 }
 
 
