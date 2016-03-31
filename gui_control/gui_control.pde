@@ -14,6 +14,9 @@ String extendingTimeRaw;
 String numCycles;
 String touchdownStart;
 String touchdownEnd;
+String touchdownCycles;
+boolean touchdown = false;
+boolean submitted = false;
   
 void setup(){
   size(800,700);
@@ -28,6 +31,36 @@ void setup(){
   String portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, portName, 9600); 
   */
+}
+
+
+
+void draw(){
+  /*
+  if ( myPort.available() > 0) 
+  {  // If data is available,
+     val = myPort.readStringUntil('\n');         // read it and store it in val
+  } 
+  //println(val); //print it out in the console
+  */
+
+  background(255,255,255);
+  imageMode(CENTER);
+  image(logo, 725, 40, width/6, height/6);
+  line(0, 350, 800, 350);
+  //makeGUI();
+  
+  line(100,650, 700,650);
+  line(100,650, 100,450);
+  line(700,650,700,450);
+  for (int i = 450; i < 650; i+=25){
+      line(100,i, 700,i);
+      text(i, 100, i);
+      
+  }
+  
+  
+  
 }
 
 
@@ -84,16 +117,26 @@ void makeGUI(){
       .setPosition(575,150).setColorValue(0).setFont(font);    
   cp5.addTextfield("touchdownEnd").setPosition(600, 150).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
-            .setAutoClear(false);      
-        
+            .setAutoClear(false);  
+  cp5.addTextlabel("touchdown3").setText("for")
+      .setPosition(630,150).setColorValue(0).setFont(font); 
+  cp5.addTextfield("touchdownCycles").setPosition(660, 150).setSize(30, 30)
+        .setFont(font).setFocus(true).setColor(color(255,255,255))
+            .setAutoClear(false); 
+  cp5.addTextlabel("touchdown4").setText("cycles")
+      .setPosition(690,150).setColorValue(0).setFont(font);             
+  // .setVisible(false) after input
+  
   cp5.addButton("Submit").setPosition(225,300);
   
 //  image(logo, 300,300);
+
 
 }
 
 
 void Submit() {
+  submitted = true;
   denaturingTemp = cp5.get(Textfield.class,"denaturingTemp").getText();
   annealingTemp = cp5.get(Textfield.class,"annealingTemp").getText();
   extendingTemp = cp5.get(Textfield.class,"extendingTemp").getText();
@@ -103,6 +146,7 @@ void Submit() {
   
   touchdownStart = cp5.get(Textfield.class,"touchdownStart").getText();
   touchdownEnd = cp5.get(Textfield.class,"touchdownEnd").getText();
+  touchdownCycles = cp5.get(Textfield.class,"touchdownCycles").getText();
   
   numCycles = cp5.get(Textfield.class,"numCycles").getText();
   
@@ -127,26 +171,8 @@ void Submit() {
     "Number of Cycles: " + numCycles
   };
   if (touchdownStart != ""){
+    touchdown = true;    //pass this through to arduino
    setup[3] = "Annealing Temp: touchdown from " + touchdownStart + " to " + touchdownEnd; 
   }
   saveStrings(filename, setup); 
-}
-
-
-
-void draw(){
-  /*
-  if ( myPort.available() > 0) 
-  {  // If data is available,
-     val = myPort.readStringUntil('\n');         // read it and store it in val
-  } 
-//println(val); //print it out in the console
-*/
-
-  background(255,255,255);
-  imageMode(CENTER);
-  image(logo, 550, 30, width/6, height/6);
-  //makeGUI();
-  
-  
 }
