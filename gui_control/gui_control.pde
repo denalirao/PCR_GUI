@@ -90,9 +90,9 @@ void Submit() {
   numCycles = cp5.get(Textfield.class,"numCycles").getText();
   
   // save this setup to file
-  String filename = "pcr_setup_" + month() + "_" + day() + "_" + year();
+  String filename = "../stored_setups/pcr_setup_" + month() + "_" + day() + "_" + year();
   File f = new File(sketchPath(filename));
-  if (f.exists()){
+  if (f.exists()){      // if file already exists, give it time
     filename = filename + "__" + hour() + "_" + minute(); 
   }
   
@@ -109,9 +109,7 @@ void Submit() {
     "\n",
     "Number of Cycles: " + numCycles
   };
-  saveStrings(filename, setup);
-  
-  
+  saveStrings(filename, setup); 
 }
 
 
