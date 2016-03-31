@@ -12,9 +12,11 @@ String denaturingTimeRaw;
 String annealingTimeRaw;
 String extendingTimeRaw;
 String numCycles;
+String touchdownStart;
+String touchdownEnd;
   
 void setup(){
-  size(600,600);
+  size(800,700);
   logo = loadImage("synbiologo.png");
   
   // set up gui features
@@ -30,14 +32,15 @@ void setup(){
 
 
 void makeGUI(){
+  // hardcoding placement because no one should be changing this
   
    cp5.addTextlabel("SETUP").setText("SETUP")
       .setPosition(20,20).setColorValue(0).setFont(createFont("Georgia", 25));
       
-  cp5.addTextlabel("Temp").setText("Temp. (C) ")
+  cp5.addTextlabel("Temp").setText("Temp. (C) : ")
       .setPosition(150,60).setColorValue(0).setFont(font);
-  cp5.addTextlabel("Time").setText("Time (min:sec) : ")
-      .setPosition(250,60).setColorValue(0).setFont(font);
+  cp5.addTextlabel("Time").setText("Time (sec) : ")
+      .setPosition(260,60).setColorValue(0).setFont(font);
   
   cp5.addTextlabel("Denature").setText("Denature: ")
       .setPosition(40,100).setColorValue(0).setFont(font);
@@ -66,12 +69,22 @@ void makeGUI(){
             .setAutoClear(false);
   cp5.addTextfield("extendingTime").setPosition(300, 200).setSize(60, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
-            .setAutoClear(false);//.setColorBackground(#ffffff);     
-                 
+            .setAutoClear(false);//.setColorBackground(#ffffff);          
                       
   cp5.addTextfield("numCycles").setPosition(175, 250).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
         .setAutoClear(false);
+        
+  cp5.addTextlabel("touchdown").setText("Or touchdown from")
+      .setPosition(400,150).setColorValue(0).setFont(font);  
+  cp5.addTextfield("touchdownStart").setPosition(540, 150).setSize(30, 30)
+        .setFont(font).setFocus(true).setColor(color(255,255,255))
+            .setAutoClear(false);   
+  cp5.addTextlabel("touchdown2").setText("to")
+      .setPosition(575,150).setColorValue(0).setFont(font);    
+  cp5.addTextfield("touchdownEnd").setPosition(600, 150).setSize(30, 30)
+        .setFont(font).setFocus(true).setColor(color(255,255,255))
+            .setAutoClear(false);      
         
   cp5.addButton("Submit").setPosition(225,300);
   
@@ -87,6 +100,10 @@ void Submit() {
   denaturingTimeRaw = cp5.get(Textfield.class,"denaturingTime").getText();
   annealingTimeRaw = cp5.get(Textfield.class,"annealingTime").getText();
   extendingTimeRaw = cp5.get(Textfield.class,"extendingTime").getText();
+  
+  touchdownStart = cp5.get(Textfield.class,"touchdownStart").getText();
+  touchdownEnd = cp5.get(Textfield.class,"touchdownEnd").getText();
+  
   numCycles = cp5.get(Textfield.class,"numCycles").getText();
   
   // save this setup to file
@@ -109,6 +126,9 @@ void Submit() {
     "\n",
     "Number of Cycles: " + numCycles
   };
+  if (touchdownStart != ""){
+   setup[3] = "Annealing Temp: touchdown from " + touchdownStart + " to " + touchdownEnd; 
+  }
   saveStrings(filename, setup); 
 }
 
