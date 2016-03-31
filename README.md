@@ -9,8 +9,12 @@ The plan:
 - Plotly for run-time visualizations
 - Plotly widget + more on tuftssyntheticbiology.com
 
-to do:
+To Do:
 - allow touchdown anneal times
 - gray out input fields after submit
-- save previous run setups (with names)
 - give choices of previous setups
+
+Done:
+- basic arduino interface - will change with hardware changes
+- basic gui
+- save previous run setups (with names) - 3/30/16
