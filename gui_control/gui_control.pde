@@ -5,16 +5,17 @@ PFont font;
 Serial myPort;
 PImage logo;
 
-String denaturingTemp;
-String annealingTemp;
-String extendingTemp;
-String denaturingTimeRaw;
-String annealingTimeRaw;
-String extendingTimeRaw;
-String numCycles;
+int denaturingTemp;
+int annealingTemp;
+int extendingTemp;
+int denaturingTimeRaw;
+int annealingTimeRaw;
+int extendingTimeRaw;
+int numCycles;
 String touchdownStart;
 String touchdownEnd;
 String touchdownCycles;
+int cycleTime;
 boolean touchdown = false;
 boolean submitted = false;
   
@@ -34,6 +35,15 @@ void setup(){
 }
 
 
+void makePlan(){
+  int currxpos = 50;
+  
+  // set to denaturingTemp for denaturingTime
+  
+  // set to annealingTemp for annealingTime (TODO touchdown)
+  
+  // set to extendingTemp for extendingTime
+}
 
 void draw(){
   /*
@@ -50,15 +60,54 @@ void draw(){
   line(0, 350, 800, 350);
   //makeGUI();
   
-  line(100,650, 700,650);
-  line(100,650, 100,450);
-  line(700,650,700,450);
-  for (int i = 450; i < 650; i+=25){
-      line(100,i, 700,i);
-      text(i, 100, i);
-      
+  strokeWeight(1);
+  // make graph
+  line(50,650, 400,650);
+  line(50,650, 50,450);
+  line(400,650,400,450);
+  for (int i = 650; i >= 450; i-=25){
+      line(50,i, 400,i);
+      if (((200 - (i - 450))/2) % 25 == 0){
+        //line(45, i, 50, i);
+        textSize(10);
+        fill(0);
+        text((200 - (i - 450))/2, 30, i+5);
+      }
   }
   
+  if (submitted){
+    // 50 to 400
+    // calculate x
+    float denaturingXPct = float(denaturingTimeRaw)/float(cycleTime);
+    float annealingXPct = float(annealingTimeRaw)/float(cycleTime);
+    float extendingXPct = float(extendingTimeRaw)/float(cycleTime);
+    float denaturingSpc = denaturingXPct * 350;
+    float annealingSpc = annealingXPct * 350;
+    float extendingSpc = extendingXPct * 350;    
+    
+    // 650 to 450
+    //calculate y
+    float denaturingY = (100 - denaturingTemp)*2 + 450;    
+    float annealingY = (100 - annealingTemp)*2 + 450;
+    float extendingY = (100 - extendingTemp)*2 + 450;
+    
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    //denaturing
+    line(50, denaturingY, 50 + denaturingSpc, denaturingY);
+      //ramp down
+    line(50+denaturingSpc, denaturingY, 50+denaturingSpc, annealingY);
+    //annealing
+    line(50 + denaturingSpc, annealingY, 50 + denaturingSpc + annealingSpc, annealingY);
+      // ramp up
+    line(50+denaturingSpc + annealingSpc, annealingY, 50+denaturingSpc + annealingSpc, extendingY);      
+    //extending
+    line(50 + denaturingSpc + annealingSpc, extendingY, 50 + denaturingSpc + annealingSpc + extendingSpc, extendingY);
+    
+    // set back to black
+    stroke(0);
+  }
+  //cp5.controller.setVisible(false);
   
   
 }
@@ -68,7 +117,8 @@ void makeGUI(){
   // hardcoding placement because no one should be changing this
   
    cp5.addTextlabel("SETUP").setText("SETUP")
-      .setPosition(20,20).setColorValue(0).setFont(createFont("Georgia", 25));
+      .setPosition(20,20).setColorValue(0)
+      .setFont(createFont("Georgia", 25));
       
   cp5.addTextlabel("Temp").setText("Temp. (C) : ")
       .setPosition(150,60).setColorValue(0).setFont(font);
@@ -84,6 +134,18 @@ void makeGUI(){
   cp5.addTextlabel("Number of Cycles").setText("Number of Cycles: ")
       .setPosition(40,250).setColorValue(0).setFont(font);      
       
+  cp5.addTextlabel("touchdown").setText("Or touchdown from")
+      .setPosition(400,150).setColorValue(0).setFont(font);  
+ 
+  cp5.addTextlabel("touchdown2").setText("to")
+      .setPosition(575,150).setColorValue(0).setFont(font);  
+  
+  cp5.addTextlabel("touchdown3").setText("for")
+      .setPosition(630,150).setColorValue(0).setFont(font); 
+  cp5.addTextlabel("touchdown4").setText("cycles")
+      .setPosition(690,150).setColorValue(0).setFont(font);  
+      
+  if (submitted == false){    
   cp5.addTextfield("denaturingTemp").setPosition(175, 100).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
         .setAutoClear(false);
@@ -107,48 +169,41 @@ void makeGUI(){
   cp5.addTextfield("numCycles").setPosition(175, 250).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
         .setAutoClear(false);
-        
-  cp5.addTextlabel("touchdown").setText("Or touchdown from")
-      .setPosition(400,150).setColorValue(0).setFont(font);  
+  
   cp5.addTextfield("touchdownStart").setPosition(540, 150).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
-            .setAutoClear(false);   
-  cp5.addTextlabel("touchdown2").setText("to")
-      .setPosition(575,150).setColorValue(0).setFont(font);    
+            .setAutoClear(false);     
   cp5.addTextfield("touchdownEnd").setPosition(600, 150).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
             .setAutoClear(false);  
-  cp5.addTextlabel("touchdown3").setText("for")
-      .setPosition(630,150).setColorValue(0).setFont(font); 
+
   cp5.addTextfield("touchdownCycles").setPosition(660, 150).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
             .setAutoClear(false); 
-  cp5.addTextlabel("touchdown4").setText("cycles")
-      .setPosition(690,150).setColorValue(0).setFont(font);             
-  // .setVisible(false) after input
-  
-  cp5.addButton("Submit").setPosition(225,300);
+
+  }
+  // .setVisible(false) after input 
+  cp5.addButton("Submit").setPosition(225,300);  
   
 //  image(logo, 300,300);
-
-
 }
 
 
 void Submit() {
   submitted = true;
-  denaturingTemp = cp5.get(Textfield.class,"denaturingTemp").getText();
-  annealingTemp = cp5.get(Textfield.class,"annealingTemp").getText();
-  extendingTemp = cp5.get(Textfield.class,"extendingTemp").getText();
-  denaturingTimeRaw = cp5.get(Textfield.class,"denaturingTime").getText();
-  annealingTimeRaw = cp5.get(Textfield.class,"annealingTime").getText();
-  extendingTimeRaw = cp5.get(Textfield.class,"extendingTime").getText();
+  denaturingTemp = int(cp5.get(Textfield.class,"denaturingTemp").getText());
+  annealingTemp = int(cp5.get(Textfield.class,"annealingTemp").getText());
+  extendingTemp = int(cp5.get(Textfield.class,"extendingTemp").getText());
+  denaturingTimeRaw = int(cp5.get(Textfield.class,"denaturingTime").getText());
+  annealingTimeRaw = int(cp5.get(Textfield.class,"annealingTime").getText());
+  extendingTimeRaw = int(cp5.get(Textfield.class,"extendingTime").getText());
   
-  touchdownStart = cp5.get(Textfield.class,"touchdownStart").getText();
+  touchdownStart =  cp5.get(Textfield.class,"touchdownStart").getText();
   touchdownEnd = cp5.get(Textfield.class,"touchdownEnd").getText();
   touchdownCycles = cp5.get(Textfield.class,"touchdownCycles").getText();
   
-  numCycles = cp5.get(Textfield.class,"numCycles").getText();
+  numCycles = int(cp5.get(Textfield.class,"numCycles").getText());
+  cycleTime = denaturingTimeRaw + annealingTimeRaw + extendingTimeRaw;
   
   // save this setup to file
   String filename = "../stored_setups/pcr_setup_" + month() + "_" + day() + "_" + year();
