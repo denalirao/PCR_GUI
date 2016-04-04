@@ -91,7 +91,7 @@ void draw(){
     float annealingY = (100 - annealingTemp)*2 + 450;
     float extendingY = (100 - extendingTemp)*2 + 450;
     
-    stroke(255, 0, 0);
+    //stroke(255, 0, 0);
     strokeWeight(2);
     //denaturing
     line(50, denaturingY, 50 + denaturingSpc, denaturingY);
@@ -116,8 +116,12 @@ void draw(){
 void makeGUI(){
   // hardcoding placement because no one should be changing this
   
-   cp5.addTextlabel("SETUP").setText("SETUP")
+  cp5.addTextlabel("SETUP").setText("SETUP")
       .setPosition(20,20).setColorValue(0)
+      .setFont(createFont("Georgia", 25));
+      
+  cp5.addTextlabel("RUNTIME").setText("RUNTIME")
+      .setPosition(20,370).setColorValue(0)
       .setFont(createFont("Georgia", 25));
       
   cp5.addTextlabel("Temp").setText("Temp. (C) : ")
