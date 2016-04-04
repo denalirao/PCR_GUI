@@ -19,3 +19,7 @@ Done:
 - basic arduino interface - will change with hardware changes
 - basic gui
 - save previous run setups (with names) - 3/30/16
+
+
+current screenshot:
+![screenshot] https://raw.githubusercontent.com/denalirao/PCR_GUI/master/screenshot.png
