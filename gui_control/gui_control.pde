@@ -18,6 +18,10 @@ String touchdownCycles;
 int cycleTime;
 boolean touchdown = false;
 boolean submitted = false;
+
+String currStep = "none";
+int currCycle = 0;
+
   
 void setup(){
   size(800,700);
@@ -71,13 +75,14 @@ void draw(){
         //line(45, i, 50, i);
         textSize(10);
         fill(0);
+        textFont(createFont("arial", 10));
         text((200 - (i - 450))/2, 30, i+5);
       }
   }
   
   if (submitted){
-    // 50 to 400
-    // calculate x
+    // once parameters are submitted, graph a sample cycle
+    // calculate x for each step  - note 50 to 400
     float denaturingXPct = float(denaturingTimeRaw)/float(cycleTime);
     float annealingXPct = float(annealingTimeRaw)/float(cycleTime);
     float extendingXPct = float(extendingTimeRaw)/float(cycleTime);
@@ -85,36 +90,51 @@ void draw(){
     float annealingSpc = annealingXPct * 350;
     float extendingSpc = extendingXPct * 350;    
     
-    // 650 to 450
-    //calculate y
+    //calculate y for each step  - note 650 to 450
     float denaturingY = (100 - denaturingTemp)*2 + 450;    
     float annealingY = (100 - annealingTemp)*2 + 450;
     float extendingY = (100 - extendingTemp)*2 + 450;
     
-    //stroke(255, 0, 0);
+    // graph the three steps -- color the current step red
     strokeWeight(2);
     //denaturing
+    if (currStep == "denaturing") stroke(255,0,0);
     line(50, denaturingY, 50 + denaturingSpc, denaturingY);
-      //ramp down
+    stroke(0);
+    //ramp down
     line(50+denaturingSpc, denaturingY, 50+denaturingSpc, annealingY);
     //annealing
+    if (currStep == "annealing") stroke(255,0,0);
     line(50 + denaturingSpc, annealingY, 50 + denaturingSpc + annealingSpc, annealingY);
-      // ramp up
+    stroke(0);
+    // ramp up
     line(50+denaturingSpc + annealingSpc, annealingY, 50+denaturingSpc + annealingSpc, extendingY);      
     //extending
+    if (currStep == "extending") stroke(255,0,0);
     line(50 + denaturingSpc + annealingSpc, extendingY, 50 + denaturingSpc + annealingSpc + extendingSpc, extendingY);
-    
     // set back to black
     stroke(0);
   }
-  //cp5.controller.setVisible(false);
   
+  textFont(font);
+  text("Current Cycle: ", 450, 475);
+  text(currCycle + " / " + numCycles, 550, 475);
+  text("Expected Temp: ", 450, 525);
+  if (currStep == "denaturing") text(denaturingTemp, 550, 525);
+  if (currStep == "annealing") text(annealingTemp, 550, 525);
+  if (currStep == "extending") text(extendingTemp, 550, 525); 
+  text("Actual Temp: ", 450, 550);
+  // TODO get actual temp from arduino serial, put it in here 
+  
+  //cp5.controller.setVisible(false);
   
 }
 
 
 void makeGUI(){
   // hardcoding placement because no one should be changing this
+  
+  // set up input fields and labels for pcr parameters
   
   cp5.addTextlabel("SETUP").setText("SETUP")
       .setPosition(20,20).setColorValue(0)
@@ -146,9 +166,10 @@ void makeGUI(){
   
   cp5.addTextlabel("touchdown3").setText("for")
       .setPosition(630,150).setColorValue(0).setFont(font); 
-  cp5.addTextlabel("touchdown4").setText("cycles")
+  cp5.addTextlabel("touchdown4").setText("cycles.")
       .setPosition(690,150).setColorValue(0).setFont(font);  
-      
+  
+  // submitted boolean does nothing here because this func is called in setup
   if (submitted == false){    
   cp5.addTextfield("denaturingTemp").setPosition(175, 100).setSize(30, 30)
         .setFont(font).setFocus(true).setColor(color(255,255,255))
@@ -188,11 +209,11 @@ void makeGUI(){
   }
   // .setVisible(false) after input 
   cp5.addButton("Submit").setPosition(225,300);  
-  
-//  image(logo, 300,300);
 }
 
 
+// when submit is pressed, parameters are stored, saved to file,
+// and pcr run begins
 void Submit() {
   submitted = true;
   denaturingTemp = int(cp5.get(Textfield.class,"denaturingTemp").getText());
