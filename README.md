@@ -21,5 +21,7 @@ Done:
 - save previous run setups (with names) - 3/30/16
 
 
-current screenshot:
+
+screenshot of current GUI:
+
 ![screenshot](https://raw.githubusercontent.com/denalirao/PCR_GUI/master/screenshot.png)
