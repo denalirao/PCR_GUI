@@ -22,4 +22,4 @@ Done:
 
 
 current screenshot:
-![screenshot] https://raw.githubusercontent.com/denalirao/PCR_GUI/master/screenshot.png
+![screenshot](https://raw.githubusercontent.com/denalirao/PCR_GUI/master/screenshot.png)
