@@ -97,32 +97,49 @@ void draw(){
     
     // graph the three steps -- color the current step red
     strokeWeight(2);
-    //denaturing
-    if (currStep == "denaturing") stroke(255,0,0);
+    
+    //denaturing - text and line
+    if (currStep == "denaturing"){ 
+      stroke(255,0,0);
+      text(currCycle + " / " + numCycles, (100 + denaturingSpc)/2, denaturingY + 20);      
+    }
+    else text(currCycle + " / " + numCycles, (100 + denaturingSpc)/2, denaturingY + 20);
     line(50, denaturingY, 50 + denaturingSpc, denaturingY);
     stroke(0);
+    
     //ramp down
     line(50+denaturingSpc, denaturingY, 50+denaturingSpc, annealingY);
-    //annealing
-    if (currStep == "annealing") stroke(255,0,0);
+    
+    //annealing - text and line
+    if (currStep == "annealing"){
+      stroke(255,0,0);
+      text(currCycle + " / " + numCycles, (100 + denaturingSpc)/2, denaturingY + 20);
+    }
+    else text(currCycle - 1 + " / " + numCycles, (100 + 2* denaturingSpc + annealingSpc)/2, annealingY + 20);
     line(50 + denaturingSpc, annealingY, 50 + denaturingSpc + annealingSpc, annealingY);
     stroke(0);
+    
     // ramp up
     line(50+denaturingSpc + annealingSpc, annealingY, 50+denaturingSpc + annealingSpc, extendingY);      
-    //extending
-    if (currStep == "extending") stroke(255,0,0);
+    
+    //extending - text and line
+    if (currStep == "extending"){
+      stroke(255,0,0);
+      text(currCycle + " / " + numCycles, (100 + 2*denaturingSpc + 2*annealingSpc + extendingSpc)/2, extendingY + 20);      
+    }
+    else text(currCycle - 1 + " / " + numCycles, (100 + 2*denaturingSpc + 2*annealingSpc + extendingSpc)/2, extendingY + 20);
     line(50 + denaturingSpc + annealingSpc, extendingY, 50 + denaturingSpc + annealingSpc + extendingSpc, extendingY);
-    // set back to black
     stroke(0);
+    
   }
   
   textFont(font);
   text("Current Cycle: ", 450, 475);
-  text(currCycle + " / " + numCycles, 550, 475);
+  text(currCycle + " / " + numCycles, 575, 475);
   text("Expected Temp: ", 450, 525);
-  if (currStep == "denaturing") text(denaturingTemp, 550, 525);
-  if (currStep == "annealing") text(annealingTemp, 550, 525);
-  if (currStep == "extending") text(extendingTemp, 550, 525); 
+  if (currStep == "denaturing") text(denaturingTemp, 575, 525);
+  if (currStep == "annealing") text(annealingTemp, 575, 525);
+  if (currStep == "extending") text(extendingTemp, 575, 525); 
   text("Actual Temp: ", 450, 550);
   // TODO get actual temp from arduino serial, put it in here 
   
